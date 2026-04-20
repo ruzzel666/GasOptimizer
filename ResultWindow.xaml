@@ -1,0 +1,55 @@
+﻿<Window x:Class="GasDistributionOptimizer.ResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Результаты оптимизации" Height="450" Width="800"
+        WindowStartupLocation="CenterOwner"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignDefaultFont}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <UniformGrid Grid.Row="0" Columns="2" Margin="0,0,0,16">
+            <materialDesign:Card Margin="4" Padding="16" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+                <StackPanel>
+                    <TextBlock Text="Общий оптимальный расход природного газа" FontSize="14" Opacity="0.8"/>
+                    <TextBlock x:Name="txtTotalGas" Text="0 м³/ч" FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Margin="4" Padding="16" Background="{DynamicResource SecondaryHueMidBrush}" Foreground="{DynamicResource SecondaryHueMidForegroundBrush}">
+                <StackPanel>
+                    <TextBlock Text="Статус решения" FontSize="14" Opacity="0.8"/>
+                    <TextBlock x:Name="txtStatus" Text="Оптимально" FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </UniformGrid>
+
+        <DataGrid x:Name="dgvDetails" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" AlternatingRowBackground="#FFF5F5F5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№ Печи" Binding="{Binding FurnaceId}" Width="80"/>
+                <DataGridTextColumn Header="Оптимальный расход газа (м³/ч)" Binding="{Binding OptimalGas, StringFormat={}{0:F2}}" Width="*"/>
+                <DataGridTextColumn Header="Расход кокса (т/ч)" Binding="{Binding FinalCoke, StringFormat={}{0:F2}}" Width="*"/>
+                <DataGridTextColumn Header="Производство чугуна (т/ч)" Binding="{Binding FinalIron, StringFormat={}{0:F2}}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Экспорт данных" 
+            Style="{StaticResource MaterialDesignOutlinedButton}" 
+            Margin="0,0,16,0" 
+            Click="Export_Click"/>
+
+            <Button Content="Закрыть" 
+            Style="{StaticResource MaterialDesignRaisedButton}" 
+            Width="120" 
+            Click="Close_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

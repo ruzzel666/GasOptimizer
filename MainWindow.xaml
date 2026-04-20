@@ -1,0 +1,70 @@
+﻿<Window x:Class="GasDistributionOptimizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Оптимизация распределения природного газа" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignDefaultFont}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Параметры доменных печей" FontSize="24" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <DataGrid x:Name="dgvFurnaces" Grid.Row="1" 
+          AutoGenerateColumns="False" 
+          CanUserAddRows="False" 
+          AlternatingRowBackground="#FFF5F5F5"
+          materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding Id}" IsReadOnly="True" Width="40"/>
+
+                <DataGridTextColumn Header="ПГ баз." Binding="{Binding BaseNaturalGas}"/>
+                <DataGridTextColumn Header="ПГ мин." Binding="{Binding MinNaturalGas}"/>
+                <DataGridTextColumn Header="ПГ макс." Binding="{Binding MaxNaturalGas}"/>
+
+                <DataGridTextColumn Header="Кокс баз." Binding="{Binding BaseCoke}"/>
+                <DataGridTextColumn Header="Экв. зам." Binding="{Binding CokeReplacementRatio}"/>
+
+                <DataGridTextColumn Header="Чугун баз." Binding="{Binding BaseIronProduction}"/>
+                <DataGridTextColumn Header="[S] баз." Binding="{Binding BaseSulfur}"/>
+
+                <DataGridTextColumn Header="Чугун мин." Binding="{Binding MinIronProduction}" Foreground="DarkGreen"/>
+                <DataGridTextColumn Header="Кокс макс." Binding="{Binding MaxCoke}" Foreground="DarkRed"/>
+
+                <DataGridTextColumn Header="dP/dV" Binding="{Binding DeltaIronPerGas}"/>
+                <DataGridTextColumn Header="dP/dK" Binding="{Binding DeltaIronPerCoke}"/>
+                <DataGridTextColumn Header="dS/dV" Binding="{Binding DeltaSulfurPerGas}"/>
+                <DataGridTextColumn Header="dS/dK" Binding="{Binding DeltaSulfurPerCoke}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnLoadTestData" Grid.Column="0" Content="Загрузить данные" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,16,0" Click="btnLoadTestData_Click"/>
+
+            <Button x:Name="btnCalculate" Grid.Column="1" Content="Рассчитать оптимизацию" 
+                    Style="{StaticResource MaterialDesignRaisedButton}" Click="btnCalculate_Click"/>
+
+            <materialDesign:Card Grid.Column="3" Padding="16" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Итоговый расход ПГ: " FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="lblTotalResult" Text="—" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</Window>
