@@ -49,7 +49,7 @@ namespace GasDistributionOptimizer
                     csvContent.AppendLine($"Общий расход природного газа;{txtTotalGas.Text.Replace(" м³/ч", "")};м3/ч");
                     csvContent.AppendLine($"Общий расход кокса;{txtTotalCoke.Text.Replace(" т/ч", "")};т/ч");
                     csvContent.AppendLine($"Общее производство чугуна;{txtTotalIron.Text.Replace(" т/ч", "")};т/ч");
-                    csvContent.AppendLine($"Общая экономия;{txtTotalSavings.Text.Replace(" руб/ч", "")};руб/ч");
+                    csvContent.AppendLine($"Экономические затраты;{txtTotalSavings.Text.Replace(" руб/ч", "")};руб/ч");
 
                     // Пустая строка для разделения секций
                     csvContent.AppendLine();

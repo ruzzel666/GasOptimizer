@@ -118,6 +118,69 @@ namespace GasDistributionOptimizer
             MessageBox.Show("Данные обновлены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void btnAddFurnace_Click(object sender, RoutedEventArgs e)
+        {
+            // Определяем номер новой печи (текущее количество + 1)
+            int newId = Furnaces.Count + 1;
+
+            // Добавляем новую печь с базовыми параметрами
+            Furnaces.Add(new BlastFurnace
+            {
+                Id = newId,
+                BaseNaturalGas = 15000,
+                MinNaturalGas = 10000,
+                MaxNaturalGas = 20000,
+                BaseCoke = 60,
+                CokeReplacementRatio = 0.6,
+                BaseIronProduction = 140,
+                MinIronProduction = 135,
+                MaxCoke = 65,
+                DeltaIronPerGas = -0.0007,
+                DeltaIronPerCoke = -0.0029,
+                DeltaSulfurPerGas = -0.000003,
+                DeltaSulfurPerCoke = -0.000003
+            });
+
+            // Прокручиваем таблицу к новой строке для удобства
+            dgvFurnaces.ScrollIntoView(Furnaces.Last());
+        }
+
+        private void btnDeleteFurnace_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Проверяем, выделена ли какая-то строка в таблице
+            if (dgvFurnaces.SelectedItem is BlastFurnace selectedFurnace)
+            {
+                // 2. Спрашиваем подтверждение, чтобы пользователь не удалил данные случайно
+                var result = MessageBox.Show($"Вы уверены, что хотите удалить печь №{selectedFurnace.Id}?",
+                                             "Удаление печи",
+                                             MessageBoxButton.YesNo,
+                                             MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // 3. Удаляем печь из нашего списка
+                    Furnaces.Remove(selectedFurnace);
+
+                    // 4. Красивая фишка: пересчитываем ID (номера), чтобы не было пропусков
+                    for (int i = 0; i < Furnaces.Count; i++)
+                    {
+                        Furnaces[i].Id = i + 1;
+                    }
+
+                    // 5. Даем команду таблице обновить визуальное отображение
+                    dgvFurnaces.Items.Refresh();
+                }
+            }
+            else
+            {
+                // Если пользователь нажал кнопку, но ничего не выделил
+                MessageBox.Show("Пожалуйста, сначала выделите печь в таблице для удаления.",
+                                "Внимание",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+            }
+        }
+
         private void btnCalculate_Click(object sender, RoutedEventArgs e)
         {
             if (Furnaces == null || Furnaces.Count == 0) return;

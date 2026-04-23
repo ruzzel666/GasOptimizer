@@ -61,6 +61,15 @@
                 <Button x:Name="btnLoadTestData" Content="Загрузить данные" 
                         Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,16,0" Click="btnLoadTestData_Click"/>
 
+                <Button x:Name="btnAddFurnace" Content="Добавить печь" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+                        Margin="0,0,16,0" Click="btnAddFurnace_Click"/>
+
+                <Button x:Name="btnDeleteFurnace" Content="Удалить печь" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+                        Foreground="DarkRed" BorderBrush="DarkRed"
+                        Margin="0,0,16,0" Click="btnDeleteFurnace_Click"/>
+
                 <Button x:Name="btnCalculate" Content="Рассчитать оптимизацию" 
                         Style="{StaticResource MaterialDesignRaisedButton}" Click="btnCalculate_Click"/>
             </StackPanel>
