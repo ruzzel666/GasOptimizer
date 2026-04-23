@@ -62,23 +62,41 @@ namespace GasDistributionOptimizer
             {
                 result.IsSuccess = true;
                 double totalGas = 0;
+                double totalCoke = 0;
+                double totalIron = 0;
+                double totalSavings = 0; // Переменная для нашей экономики
+
+                // Очищаем список на всякий случай, чтобы таблица точно обновилась
+                result.FurnaceDetailResults.Clear();
 
                 foreach (var f in furnaces)
                 {
+                    // Получаем оптимальный газ для печи
                     double optimalGas = gasVars[f.Id].SolutionValue();
                     totalGas += optimalGas;
 
                     // Считаем изменения
                     double deltaV = optimalGas - f.BaseNaturalGas;
-
-                    // Итоговый кокс (переводим эквивалент в тонны через 0.001)
                     double finalCoke = f.BaseCoke - (0.001 * f.CokeReplacementRatio * deltaV);
 
-                    // Итоговый чугун
                     double coeffIron = f.DeltaIronPerGas - (f.CokeReplacementRatio * f.DeltaIronPerCoke);
                     double finalIron = f.BaseIronProduction + (coeffIron * deltaV);
 
-                    // Добавляем результат в список
+                    // Плюсуем общие расходы цеха
+                    totalCoke += finalCoke;
+                    totalIron += finalIron;
+
+                    // --- ЧЕСТНЫЙ РАСЧЕТ ОБЩИХ ЗАТРАТ ---
+                    // Затраты на газ = Оптимальный газ * Цена газа (valB30)
+                    double gasCost = optimalGas * valB30;
+
+                    // Затраты на кокс = Итоговый кокс (в тоннах) * 1000 кг * Цена кокса (valB29)
+                    double cokeCost = finalCoke * 1000 * valB29;
+
+                    // Суммируем затраты (используем ту же переменную totalSavings, чтобы не менять модель)
+                    totalSavings += (gasCost + cokeCost);
+
+                    // ОБЯЗАТЕЛЬНО: Возвращаем данные печи в список, чтобы появилась таблица!
                     result.FurnaceDetailResults.Add(new FurnaceResult
                     {
                         FurnaceId = f.Id,
@@ -87,7 +105,12 @@ namespace GasDistributionOptimizer
                         FinalIron = finalIron
                     });
                 }
+
+                // Записываем финальные итоги в результат
                 result.TotalNaturalGas = totalGas;
+                result.TotalCoke = totalCoke;
+                result.TotalIronProduction = totalIron;
+                result.TotalSavings = totalSavings;
             }
             else
             {

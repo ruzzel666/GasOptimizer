@@ -122,16 +122,24 @@ namespace GasDistributionOptimizer
         {
             if (Furnaces == null || Furnaces.Count == 0) return;
 
-            double valB29 = 1.8;
-            double valB30 = 0.6;
+            // Безопасный парсинг: заменяем точки на запятые, чтобы программа понимала любой ввод
+            string rawGas = txtGasPrice.Text.Replace(".", ",");
+            string rawCoke = txtCokePrice.Text.Replace(".", ",");
+
+            if (!double.TryParse(rawGas, out double gasPrice) ||
+                !double.TryParse(rawCoke, out double cokePrice))
+            {
+                MessageBox.Show("Введите корректные числовые значения цен!", "Ошибка ввода");
+                return;
+            }
 
             var solver = new GasDistributionSolver();
-            OptimizationResult result = solver.Solve(Furnaces, valB29, valB30);
+
+            // ИСПРАВЛЕНО: Сначала передаем Кокс (valB29), затем Газ (valB30)
+            OptimizationResult result = solver.Solve(Furnaces, cokePrice, gasPrice);
 
             if (result.IsSuccess)
             {
-                lblTotalResult.Text = result.TotalNaturalGas.ToString("F2") + " м³/ч";
-
                 var resultWin = new ResultWindow(result);
                 resultWin.Owner = this;
                 resultWin.ShowDialog();

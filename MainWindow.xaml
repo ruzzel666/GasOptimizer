@@ -45,26 +45,26 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid Grid.Row="2" Margin="0,16,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="2" Margin="0,16,0,0">
 
-            <Button x:Name="btnLoadTestData" Grid.Column="0" Content="Загрузить данные" 
-                    Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,16,0" Click="btnLoadTestData_Click"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                <TextBlock Text="Общие параметры цеха" FontSize="16" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,16,0"/>
 
-            <Button x:Name="btnCalculate" Grid.Column="1" Content="Рассчитать оптимизацию" 
-                    Style="{StaticResource MaterialDesignRaisedButton}" Click="btnCalculate_Click"/>
+                <TextBox x:Name="txtGasPrice" Width="140" materialDesign:HintAssist.Hint="Стоймость газа (руб/м³)" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,16,0" Text="0.6" FontSize="16"/>
 
-            <materialDesign:Card Grid.Column="3" Padding="16" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Итоговый расход ПГ: " FontSize="16" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="lblTotalResult" Text="—" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                </StackPanel>
-            </materialDesign:Card>
-        </Grid>
+                <TextBox x:Name="txtCokePrice" Width="140" materialDesign:HintAssist.Hint="Стоймость кокса (руб/кг)" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="1.8" FontSize="16"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnLoadTestData" Content="Загрузить данные" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,16,0" Click="btnLoadTestData_Click"/>
+
+                <Button x:Name="btnCalculate" Content="Рассчитать оптимизацию" 
+                        Style="{StaticResource MaterialDesignRaisedButton}" Click="btnCalculate_Click"/>
+            </StackPanel>
+
+        </StackPanel>
     </Grid>
 </Window>

@@ -12,11 +12,14 @@ namespace GasDistributionOptimizer
         {
             InitializeComponent();
 
-            // Заполняем красивые карточки наверху
             txtTotalGas.Text = $"{result.TotalNaturalGas:F2} м³/ч";
-            txtStatus.Text = result.IsSuccess ? "Оптимально" : "Ошибка";
+            txtTotalCoke.Text = $"{result.TotalCoke:F2} т/ч";
+            txtTotalIron.Text = $"{result.TotalIronProduction:F2} т/ч";
 
-            // Привязываем список результатов к таблице
+            // Math.Abs гарантирует отсутствие минуса
+            txtTotalSavings.Text = $"{Math.Abs(result.TotalSavings):F2} руб/ч";
+
+            // Строка, которая рисует таблицу!
             dgvDetails.ItemsSource = result.FurnaceDetailResults;
         }
 
@@ -27,12 +30,11 @@ namespace GasDistributionOptimizer
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Настраиваем окно сохранения
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV файл (*.csv)|*.csv",
-                FileName = $"Отчет_ПГ_{DateTime.Now:yyyyMMdd_HHmm}.csv",
-                Title = "Сохранение результатов расчета"
+                FileName = $"Отчет_Цех_{DateTime.Now:yyyyMMdd_HHmm}.csv",
+                Title = "Сохранение результатов оптимизации"
             };
 
             if (saveFileDialog.ShowDialog() == true)
@@ -41,28 +43,38 @@ namespace GasDistributionOptimizer
                 {
                     StringBuilder csvContent = new StringBuilder();
 
-                    // 2. Добавляем заголовки (используем точку с запятой, чтобы Excel в РФ открыл сразу по столбцам)
-                    csvContent.AppendLine("Номер печи;Оптимальный газ (м3/ч);Итоговый кокс (т/ч);Итоговый чугун (т/ч)");
+                    // 1. СЕКЦИЯ: ОБЩИЕ ПОКАЗАТЕЛИ ПО ЦЕХУ
+                    csvContent.AppendLine("Общие показатели по цеху");
+                    csvContent.AppendLine($"Параметр;Значение;Ед. изм.");
+                    csvContent.AppendLine($"Общий расход природного газа;{txtTotalGas.Text.Replace(" м³/ч", "")};м3/ч");
+                    csvContent.AppendLine($"Общий расход кокса;{txtTotalCoke.Text.Replace(" т/ч", "")};т/ч");
+                    csvContent.AppendLine($"Общее производство чугуна;{txtTotalIron.Text.Replace(" т/ч", "")};т/ч");
+                    csvContent.AppendLine($"Общая экономия;{txtTotalSavings.Text.Replace(" руб/ч", "")};руб/ч");
 
-                    // 3. Добавляем данные по каждой печи
-                    foreach (var furnace in dgvDetails.ItemsSource as List<FurnaceResult>)
+                    // Пустая строка для разделения секций
+                    csvContent.AppendLine();
+
+                    // 2. СЕКЦИЯ: ДЕТАЛИЗАЦИЯ ПО ПЕЧАМ
+                    csvContent.AppendLine("Детализация по каждой печи");
+                    csvContent.AppendLine("Номер печи;Оптимальный ПГ (м3/ч);Итоговый кокс (т/ч);Итоговый чугун (т/ч)");
+
+                    // Берем данные из ItemsSource таблицы
+                    if (dgvDetails.ItemsSource is IEnumerable<FurnaceResult> details)
                     {
-                        csvContent.AppendLine($"{furnace.FurnaceId};{furnace.OptimalGas:F2};{furnace.FinalCoke:F2};{furnace.FinalIron:F2}");
+                        foreach (var f in details)
+                        {
+                            csvContent.AppendLine($"{f.FurnaceId};{f.OptimalGas:F2};{f.FinalCoke:F2};{f.FinalIron:F2}");
+                        }
                     }
 
-                    // 4. Добавляем итоговую строку
-                    // Мы можем достать общее значение из текстового блока или передать его отдельно
-                    csvContent.AppendLine($";;;");
-                    csvContent.AppendLine($"Итог по цеху;{txtTotalGas.Text.Replace(" м³/ч", "")};;");
-
-                    // 5. Записываем в файл в кодировке UTF-8 с BOM (чтобы Excel понимал кириллицу)
+                    // Записываем файл (Encoding.UTF8 с BOM важен для кириллицы в Excel)
                     File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
 
                     MessageBox.Show("Отчет успешно сохранен!", "Экспорт", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ошибка при экспорте: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -15,20 +15,36 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.Row="0" Columns="2" Margin="0,0,0,16">
-            <materialDesign:Card Margin="4" Padding="16" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+        <UniformGrid Grid.Row="0" Columns="4" Margin="0,0,0,16">
+
+            <materialDesign:Card Margin="4" Padding="12" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
                 <StackPanel>
-                    <TextBlock Text="Общий оптимальный расход природного газа" FontSize="14" Opacity="0.8"/>
-                    <TextBlock x:Name="txtTotalGas" Text="0 м³/ч" FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                    <TextBlock Text="Общий расход газа (м³/ч)" FontSize="12" Opacity="0.8"/>
+                    <TextBlock x:Name="txtTotalGas" Text="0 м³/ч" FontSize="20" FontWeight="Bold" Margin="0,4,0,0"/>
                 </StackPanel>
             </materialDesign:Card>
 
-            <materialDesign:Card Margin="4" Padding="16" Background="{DynamicResource SecondaryHueMidBrush}" Foreground="{DynamicResource SecondaryHueMidForegroundBrush}">
+            <materialDesign:Card Margin="4" Padding="12" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
                 <StackPanel>
-                    <TextBlock Text="Статус решения" FontSize="14" Opacity="0.8"/>
-                    <TextBlock x:Name="txtStatus" Text="Оптимально" FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                    <TextBlock Text="Общий расход кокса (т/ч)" FontSize="12" Opacity="0.8"/>
+                    <TextBlock x:Name="txtTotalCoke" Text="0 т/ч" FontSize="20" FontWeight="Bold" Margin="0,4,0,0"/>
                 </StackPanel>
             </materialDesign:Card>
+
+            <materialDesign:Card Margin="4" Padding="12" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                <StackPanel>
+                    <TextBlock Text="Общее производство (т/ч)" FontSize="12" Opacity="0.9"/>
+                    <TextBlock x:Name="txtTotalIron" Text="0 т/ч" FontSize="20" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Margin="4" Padding="12" Background="{DynamicResource SecondaryHueMidBrush}" Foreground="{DynamicResource SecondaryHueMidForegroundBrush}">
+                <StackPanel>
+                    <TextBlock Text="Общая экономия" FontSize="12" Opacity="0.8"/>
+                    <TextBlock x:Name="txtTotalSavings" Text="0 руб/ч" FontSize="18" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
         </UniformGrid>
 
         <DataGrid x:Name="dgvDetails" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" AlternatingRowBackground="#FFF5F5F5">
