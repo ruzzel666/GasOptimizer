@@ -8,7 +8,6 @@ namespace GasDistributionOptimizer.Views
         public MainWindow()
         {
             InitializeComponent();
-
             this.DataContext = new MainViewModel();
         }
     }

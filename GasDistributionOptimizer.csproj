@@ -13,4 +13,8 @@
     <PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GasDistributionOptimizer.Tests\" />
+  </ItemGroup>
+
 </Project>

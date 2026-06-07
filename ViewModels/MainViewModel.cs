@@ -42,7 +42,6 @@ namespace GasDistributionOptimizer.ViewModels
         public ICommand AddFurnaceCommand { get; }
         public ICommand DeleteFurnaceCommand { get; }
         public ICommand CalculateCommand { get; }
-
         public MainViewModel()
         {
             LoadDataCommand = new RelayCommand(_ => LoadTestData());
@@ -93,14 +92,14 @@ namespace GasDistributionOptimizer.ViewModels
             var solver = new GasDistributionSolver();
             var result = solver.Solve(Furnaces, parsedCokePrice, parsedGasPrice);
 
-            if (result.IsSuccess)
+            if (result != null && result.IsSuccess)
             {
                 var resultWin = new ResultWindow(result);
                 resultWin.ShowDialog();
             }
             else
             {
-                MessageBox.Show(result.StatusMessage, "Ошибка");
+                MessageBox.Show(result?.StatusMessage ?? "Ошибка при расчете", "Ошибка");
             }
         }
         #endregion
